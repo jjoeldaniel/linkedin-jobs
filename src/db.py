@@ -156,7 +156,7 @@ def initialize_database() -> None:
                     date_added text default current_timestamp
                 )"""
         )
-    except sqlite3.OperationalError as e:
+    except sqlite3.OperationalError:
         # Table already exists
         pass
 
