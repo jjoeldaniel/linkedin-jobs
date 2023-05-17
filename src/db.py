@@ -67,7 +67,7 @@ def get_job(job: Job) -> Job:
 
     conn.close()
 
-    return result
+    return Job(result[1], result[2], result[3], result[4], result[5], result[6])
 
 
 def get_jobs() -> list[Job]:
@@ -81,7 +81,7 @@ def get_jobs() -> list[Job]:
 
     conn.close()
 
-    return jobs
+    return [Job(job[1], job[2], job[3], job[4], job[5], job[6]) for job in jobs]
 
 
 def insert_job(job: Job) -> None:
@@ -95,8 +95,16 @@ def insert_job(job: Job) -> None:
         return
 
     c.execute(
-        "INSERT INTO jobs VALUES (?, ?, ?, ?, ?, ?)",
-        (str(uuid.uuid4()), job.title, job.company, job.location, job.link, job.date),
+        "INSERT INTO jobs VALUES (?, ?, ?, ?, ?, ?, ?)",
+        (
+            (str(uuid.uuid4())),
+            job.title,
+            job.company,
+            job.location,
+            job.link,
+            job.date,
+            job.date_added,
+        ),
     )
 
     conn.commit()
@@ -117,7 +125,8 @@ def initialize_database():
                 company text not null,
                 location text not null,
                 link text,
-                date text
+                date text,
+                date_added text default current_timestamp
             )"""
     )
 
