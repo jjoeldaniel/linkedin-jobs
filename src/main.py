@@ -1,22 +1,11 @@
 from bs4 import BeautifulSoup
 import requests
+from job import Job
 
 
 # URL containing pre-filtered job search results
 # for "software engineer intern/entry level" in the last 7 days
 linkedin_url = "https://www.linkedin.com/jobs/search/?currentJobId=3511050778&f_E=1%2C2&f_JT=F%2CI&f_TPR=r604800&geoId=103644278&keywords=software%20engineer%20intern&location=United%20States&refresh=true"
-
-
-class Job:
-    def __init__(self, title, company, location, link, date):
-        self.title = title
-        self.company = company
-        self.location = location
-        self.link = link
-        self.date = date
-
-    def __str__(self):
-        return f"Title: {self.title}\nCompany: {self.company}\nLocation: {self.location}\nLink: {self.link}\nDate Posted: {self.date}\n"
 
 
 def main():
