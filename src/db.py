@@ -56,13 +56,13 @@ def delete_job(job: Job) -> None:
     conn.close()
 
 
-def get_job(job: Job) -> Job:
+def get_job(title: str) -> Job:
     """Returns job with specified title"""
 
     conn = sqlite3.connect("jobs.db")
     c = conn.cursor()
 
-    c.execute("SELECT * FROM jobs WHERE title = ?", (job.title,))
+    c.execute("SELECT * FROM jobs WHERE title = ?", (title))
     result = c.fetchone()
 
     conn.close()
