@@ -2,6 +2,10 @@ beautifulsoup4==4.12.2
 certifi==2023.5.7
 charset-normalizer==3.1.0
 idna==3.4
+Jinja2==3.1.2
+MarkupSafe==2.1.2
+pdoc==13.1.1
+Pygments==2.15.1
 requests==2.30.0
 soupsieve==2.4.1
 urllib3==2.0.2
