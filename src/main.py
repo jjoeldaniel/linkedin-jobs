@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 from job import Job
+import db as db
 
 
 # URL containing pre-filtered job search results
@@ -33,8 +34,9 @@ def main():
         jobs.append(Job(title, company, location, link, date))
 
     for job in jobs:
-        print(job)
+        db.insert_job(job)
 
 
 if __name__ == "__main__":
+    db.initialize_database()
     main()
