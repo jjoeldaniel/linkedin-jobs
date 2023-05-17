@@ -8,8 +8,8 @@ It ships with a simple SQLite database to store the scraped opportunities. The d
 
 ## Documentation
 
-- [job.py](job.html) - Contains the Job class, which represents a job opportunity.
+- [job.py](https://jjoeldaniel.github.io/linkedin-jobs/job.html) - Contains the Job class, which represents a job opportunity.
 
-- main.py - Contains the main function, which is the entry point of the program.
+- [main.py](https://jjoeldaniel.github.io/linkedin-jobs/main.html) - Contains the main function, which is the entry point of the program.
 
-- [db.py](db.html) - Contains the Database class, which represents a SQLite database.
+- [db.py](https://jjoeldaniel.github.io/linkedin-jobs/db.html) Contains the Database class, which represents a SQLite database.
