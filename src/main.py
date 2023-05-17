@@ -9,7 +9,9 @@ import db as db
 linkedin_url = "https://www.linkedin.com/jobs/search/?currentJobId=3511050778&f_E=1%2C2&f_JT=F%2CI&f_TPR=r604800&geoId=103644278&keywords=software%20engineer%20intern&location=United%20States&refresh=true"
 
 
-def main():
+def scrape_postings() -> list[Job]:
+    """Scrapes job postings from LinkedIn and returns a list of Job objects"""
+
     # Get the HTML content of the URL
     html = requests.get(linkedin_url).content
     soup = BeautifulSoup(html, "html.parser")
@@ -33,8 +35,13 @@ def main():
 
         jobs.append(Job(title, company, location, link, date))
 
-    for job in jobs:
-        db.insert_job(job)
+
+def main():
+    """Main function"""
+
+    new_postings = scrape_postings()
+
+    assert len(new_postings) > 0, "No new postings found"
 
 
 if __name__ == "__main__":
