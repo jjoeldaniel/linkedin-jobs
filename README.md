@@ -1,4 +1,4 @@
-# SWE Opportuniy Scraper
+# linkedin-jobs
 
 ## Description
 
