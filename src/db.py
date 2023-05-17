@@ -9,7 +9,10 @@ def does_exist(job: Job) -> bool:
     conn = sqlite3.connect("jobs.db")
     c = conn.cursor()
 
-    c.execute("SELECT * FROM jobs WHERE title = ?", (job.title,))
+    c.execute(
+        "SELECT * FROM jobs WHERE title = ? AND company = ? AND location = ?",
+        (job.title, job.company, job.location),
+    )
     result = c.fetchone()
 
     conn.close()
@@ -27,6 +30,10 @@ def edit_job(
     conn = sqlite3.connect("jobs.db")
     c = conn.cursor()
 
+    # Check if job exists in database
+    if not does_exist(job):
+        return
+
     c.execute(f"UPDATE jobs SET {field} = ? WHERE title = ?", (value, job.title))
 
     conn.commit()
@@ -38,6 +45,10 @@ def delete_job(job: Job) -> None:
 
     conn = sqlite3.connect("jobs.db")
     c = conn.cursor()
+
+    # Check if job exists in database
+    if not does_exist(job):
+        return
 
     c.execute("DELETE FROM jobs WHERE title = ?", (job.title,))
 
@@ -78,6 +89,10 @@ def insert_job(job: Job) -> None:
 
     conn = sqlite3.connect("jobs.db")
     c = conn.cursor()
+
+    # Check if job already exists in database
+    if does_exist(job):
+        return
 
     c.execute(
         "INSERT INTO jobs VALUES (?, ?, ?, ?, ?, ?)",
