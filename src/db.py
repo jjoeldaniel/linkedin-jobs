@@ -1,5 +1,4 @@
 import sqlite3
-import uuid
 from job import Job
 
 
@@ -10,8 +9,8 @@ def does_exist(job: Job) -> bool:
         c: sqlite3.Cursor = conn.cursor()
 
         c.execute(
-            "SELECT * FROM jobs WHERE title = ? AND company = ? AND location = ?",
-            (job.title, job.company, job.location),
+            "SELECT * FROM jobs WHERE link = ?",
+            (job.link),
         )
 
         return c.fetchone() is not None
@@ -64,21 +63,6 @@ def delete_job(job: Job) -> None:
                 raise e
 
 
-def get_job(title: str) -> Job:
-    """Returns job with specified title"""
-
-    with sqlite3.connect("jobs.db") as conn:
-        c = conn.cursor()
-
-        c.execute("SELECT * FROM jobs WHERE title = ?", (title))
-        result = c.fetchone()
-
-        if result is None:
-            raise ValueError("No job found with that title")
-
-        return Job(result[1], result[2], result[3], result[4], result[5], result[6])
-
-
 def get_jobs() -> list[Job]:
     """Returns all jobs in database"""
 
@@ -86,9 +70,10 @@ def get_jobs() -> list[Job]:
         c: sqlite3.Cursor = conn.cursor()
 
         c.execute("SELECT * FROM jobs")
-        jobs: list[tuple[int, str, int, str, str, int]] = c.fetchall()
+        jobs: list[tuple[str, int, str, str, int]] = c.fetchall()
+        print(jobs[0])
 
-        return [Job(job[1], job[2], job[3], job[4], job[5], job[6]) for job in jobs]
+        return [Job(*job) for job in jobs]
 
 
 def insert_job(job: Job) -> None:
@@ -101,9 +86,8 @@ def insert_job(job: Job) -> None:
     with sqlite3.connect("jobs.db") as conn:
         try:
             conn.cursor().execute(
-                "INSERT INTO jobs VALUES (?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO jobs VALUES (?, ?, ?, ?, ?, ?)",
                 (
-                    (str(uuid.uuid4())),
                     job.title,
                     job.company,
                     job.location,
@@ -124,7 +108,6 @@ def initialize_database() -> None:
         try:
             conn.cursor().execute(
                 """CREATE TABLE jobs (
-                        unique_id text primary key,
                         title text not null,
                         company text not null,
                         location text not null,
