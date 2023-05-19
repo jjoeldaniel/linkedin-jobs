@@ -20,7 +20,23 @@ class Job:
         self.date = date
         self.date_added = date_added
 
-    def __str__(self):
+    def __eq__(self, other):
+        """Returns true if two Job objects are equal"""
+
+        return (
+            self.title == other.title
+            and self.company == other.company
+            and self.location == other.location
+            and self.link == other.link
+            and self.date == other.date
+        )
+
+    def __repr__(self) -> str:
+        """Returns a string representation of the Job object"""
+
+        return f"Job(title={self.title}, company={self.company}, location={self.location}, link={self.link}, date={self.date}, date_added={self.date_added})"
+
+    def __str__(self) -> str:
         """Returns a string representation of the Job object"""
 
         return f"Title: {self.title}\nCompany: {self.company}\nLocation: {self.location}\nLink: {self.link}\nDate Posted: {self.date}\nDate Added: {self.date_added}\n"
