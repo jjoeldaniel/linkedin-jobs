@@ -71,8 +71,8 @@ def initialize_database() -> None:
                         title text not null,
                         company text not null,
                         location text not null,
-                        link text,
-                        date text
+                        link text PRIMARY KEY not null,
+                        date date not null
                     )"""
             )
             conn.commit()
