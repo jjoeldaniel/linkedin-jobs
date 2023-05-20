@@ -39,7 +39,7 @@ def scrape_postings() -> list[Job]:
             post.find(name="a", class_="base-card__full-link").get("href")
         ).strip()
 
-        link = link.split('?')[0]
+        link = link.split("?")[0]
 
         jobs.append(Job(title, company, location, link, date))
 
@@ -49,14 +49,14 @@ def scrape_postings() -> list[Job]:
 def main():
     """Main function"""
 
-    # new_postings: list[Job] = scrape_postings()
-    # for j in new_postings:
-    #     db.insert_job(j)
+    new_postings: list[Job] = scrape_postings()
+    for j in new_postings:
+        db.insert_job(j)
 
-    jobs = db.get_jobs()
-    for j in jobs:
-        print(j)
-        print()
+    # jobs = db.get_jobs()
+    # for j in jobs:
+    #     print(j)
+    #     print()
 
 
 if __name__ == "__main__":
