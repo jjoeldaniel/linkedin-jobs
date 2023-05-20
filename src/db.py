@@ -10,44 +10,10 @@ def does_exist(job: Job) -> bool:
 
         c.execute(
             "SELECT * FROM jobs WHERE link = ?",
-            (job.link),
+            ([job.link]),
         )
 
         return c.fetchone() is not None
-
-
-def edit_job(
-    job: Job,
-    field: str,
-    value: str,
-) -> None:
-    """Edits job with specified title"""
-
-    # Check if job exists in database
-    if not does_exist(job):
-        raise ValueError("Job does not exist")
-
-    # Check if field is valid
-    if field not in ("title", "company", "link", "location", "date"):
-        raise ValueError("Invalid field")
-
-    with sqlite3.connect("jobs.db") as conn:
-        conn.cursor().execute(
-            f"UPDATE jobs SET {field} = ? WHERE title = ?", (value, job.title)
-        )
-
-    # Modify job object
-    match field:
-        case "title":
-            job.title = value
-        case "company":
-            job.company = value
-        case "link":
-            job.link = value
-        case "location":
-            job.location = value
-        case "date":
-            job.date = value
 
 
 def delete_job(job: Job) -> None:
@@ -58,7 +24,8 @@ def delete_job(job: Job) -> None:
             c: sqlite3.Cursor = conn.cursor()
 
             try:
-                c.execute("DELETE FROM jobs WHERE title = ?", (job.title,))
+                c.execute("DELETE FROM jobs WHERE link = ?", (job.link,))
+                conn.commit()
             except sqlite3.Error as e:
                 raise e
 
@@ -86,16 +53,10 @@ def insert_job(job: Job) -> None:
     with sqlite3.connect("jobs.db") as conn:
         try:
             conn.cursor().execute(
-                "INSERT INTO jobs VALUES (?, ?, ?, ?, ?, ?)",
-                (
-                    job.title,
-                    job.company,
-                    job.location,
-                    job.link,
-                    job.date,
-                    job.date_added,
-                ),
+                "INSERT INTO jobs VALUES (?, ?, ?, ?, ?)",
+                (job.title, job.company, job.location, job.link, job.date),
             )
+            conn.commit()
         except Exception as e:
             print(f"Error: {e}")
 
@@ -112,10 +73,10 @@ def initialize_database() -> None:
                         company text not null,
                         location text not null,
                         link text,
-                        date text,
-                        date_added text default current_timestamp
+                        date text
                     )"""
             )
+            conn.commit()
         except sqlite3.OperationalError:
             # Table already exists
             pass
