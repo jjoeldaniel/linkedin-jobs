@@ -1,3 +1,4 @@
+import datetime
 from bs4 import BeautifulSoup
 import requests
 from job import Job
@@ -39,7 +40,32 @@ def scrape_postings() -> list[Job]:
             post.find(name="a", class_="base-card__full-link").get("href")
         ).strip()
 
+        # remove query parameters from link
         link = link.split("?")[0]
+
+        # convert relative date to absolute date
+        units = date.split(" ")[1]
+        length = int(date.split(" ")[0])
+
+        # remove 's' from units if necessary
+        if units[-1] == "s":
+            units = units[:-1]
+
+        match units:
+            case "minute":
+                date = datetime.datetime.now() - datetime.timedelta(minutes=length)
+            case "hour":
+                date = datetime.datetime.now() - datetime.timedelta(hours=length)
+            case "day":
+                date = datetime.datetime.now() - datetime.timedelta(days=length)
+            case "week":
+                date = datetime.datetime.now() - datetime.timedelta(weeks=length)
+            case _:
+                date = datetime.datetime.now()
+
+        # format date %m/%d/%Y %H:%M %p
+        tup = date.timetuple()
+        date = datetime.datetime(*tup[:6])
 
         jobs.append(Job(title, company, location, link, date))
 
@@ -56,7 +82,6 @@ def main():
     # jobs = db.get_jobs()
     # for j in jobs:
     #     print(j)
-    #     print()
 
 
 if __name__ == "__main__":
