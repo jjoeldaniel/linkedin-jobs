@@ -37,7 +37,7 @@ def get_jobs() -> list[Job]:
         c: sqlite3.Cursor = conn.cursor()
 
         c.execute("SELECT * FROM jobs")
-        jobs: list[tuple[str, int, str, str, int]] = c.fetchall()
+        jobs: list[tuple[str, str, str, str, str]] = c.fetchall()
 
         return [Job(*job) for job in jobs]
 
