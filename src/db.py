@@ -38,7 +38,6 @@ def get_jobs() -> list[Job]:
 
         c.execute("SELECT * FROM jobs")
         jobs: list[tuple[str, int, str, str, int]] = c.fetchall()
-        print(jobs[0])
 
         return [Job(*job) for job in jobs]
 
